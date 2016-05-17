@@ -56,9 +56,9 @@ ACOSPITT.initialize = function(req, params, handlers, cb) {
 
 };
 
-ACOSPITT.handleEvent = function(event, payload, req, res, protocolData) {
+ACOSPITT.handleEvent = function(event, payload, req, res, protocolData, responseObj, cb) {
 
-  //jsvee
+  // Jsvee
   if (event === 'line' && protocolData.app && parseInt(protocolData.app, 10) === 35) {
 
     var endpoint = "http://adapt2.sis.pitt.edu/cbum/um?app=%s&act=%s&sub=%s&usr=%s&grp=%s&sid=%s&res=-1&svc=ACOS";
@@ -67,14 +67,18 @@ ACOSPITT.handleEvent = function(event, payload, req, res, protocolData) {
 
     http.get(endpoint, function(result) {
       if (result.statusCode === 200) {
-        res.json({ 'status': 'OK' });
+        res.json({ 'status': 'OK', 'protocol': responseObj.protocol, 'content': responseObj.content });
       } else {
-        res.json({ 'status': 'ERROR' });
+        res.json({ 'status': 'ERROR', 'protocol': responseObj.protocol, 'content': responseObj.content });
       }
+      cb(event, payload, req, res, protocolData, responseObj);
     }).on('error', function(e) {
-      res.json({ 'status': 'ERROR' });
+      res.json({ 'status': 'ERROR', 'protocol': responseObj.protocol, 'content': responseObj.content });
+      cb(event, payload, req, res, protocolData, responseObj);
     });
-    //parsons problems
+
+
+    // Parsons problems
   } else if (event === 'grade' && protocolData.app && parseInt(protocolData.app, 10) === 38) {
 
     var endpoint = "http://adapt2.sis.pitt.edu/cbum/um?app=%s&act=%s&sub=%s&usr=%s&grp=%s&sid=%s&res=%s&svc=ACOS"; // jshint ignore:line
@@ -83,15 +87,18 @@ ACOSPITT.handleEvent = function(event, payload, req, res, protocolData) {
 
     http.get(endpoint, function(result) {
       if (result.statusCode === 200) {
-        res.json({ 'status': 'OK' });
+        res.json({ 'status': 'OK', 'protocol': responseObj.protocol, 'content': responseObj.content });
       } else {
-        res.json({ 'status': 'ERROR' });
+        res.json({ 'status': 'ERROR', 'protocol': responseObj.protocol, 'content': responseObj.content });
       }
+      cb(event, payload, req, res, protocolData, responseObj);
     }).on('error', function(e) {
-      res.json({ 'status': 'ERROR' });
+      res.json({ 'status': 'ERROR', 'protocol': responseObj.protocol, 'content': responseObj.content });
+      cb(event, payload, req, res, protocolData, responseObj);
     });
   } else {
-    res.json({ 'status': 'OK' });
+    res.json({ 'status': 'OK', 'protocol': responseObj.protocol, 'content': responseObj.content });
+    cb(event, payload, req, res, protocolData, responseObj);
   }
 
 };
@@ -109,7 +116,7 @@ ACOSPITT.meta = {
   'description': '',
   'author': 'Teemu Sirkiä',
   'license': 'MIT',
-  'version': '0.1.0',
+  'version': '0.2.0',
   'url': ''
 };
 
