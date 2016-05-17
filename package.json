@@ -1,10 +1,9 @@
 {
   "name": "acos-pitt",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Acos communication protocol to Pittsburgh University",
   "main": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "author": "Teemu Sirkiä, Lassi Haaranen",
   "license": "MIT",
   "repository": {
